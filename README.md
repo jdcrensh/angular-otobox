@@ -5,15 +5,17 @@
 **This Angular module is written based on otobox.js from Afshin Mehrabani**
 
 ## How to use
-&lt;textarea
+```javascript
+
+<textarea
     otobox="mention.array"
     otobox-key="@"
     otobox-custom-choice="true"
     otobox-include-key="true"
     otobox-allowed-chars="[a-zA-Z0-9]+"
-    otobox-source="/api/users.json"&gt;
-  &lt;/textarea&gt;
-
+    otobox-source="/api/users.json">
+  </textarea>
+  ```
 ## Roadmap
 - Caching prevoiusly loaded names
 
@@ -30,7 +32,7 @@
 - [Github](https://github.com/afshinm)
 
 ## License
-> Copyright (C) 2015 Ali Haghighatkhah (haghighatkhah.ali@gmail.com)
+> Copyright (C) 2015 Ali Haghighatkhah (alihaghighatkhah@yahoo.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation
