@@ -28,7 +28,7 @@
 - [Github](https://github.com/alihaghighatkhah)
 - [Personal page](http://colorofweb.com/)
 
-** Special thanks to Afshin Mehrabani**
+**Special thanks to Afshin Mehrabani**
 - [Github](https://github.com/afshinm)
 
 ## License
