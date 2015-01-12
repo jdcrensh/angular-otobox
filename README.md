@@ -5,14 +5,49 @@
 **This Angular module is written based on otobox.js from Afshin Mehrabani**
 
 ## How to use
-&lt;textarea
+
+It's possible to define as much activators as needed:
+```javascript
+app.directive('otoboxConfig', function () {
+  return {
+    controller: function ($scope) {
+
+      $scope.config =  [
+        {
+          name: "mention.array",
+          key: "@",
+          customChoice: "false",
+          includeKey: "true",
+          allowedChars: "[a-zA-Z0-9]+",
+          source: "/path/to/users"
+        },
+        {
+          name: "mention.array",
+          key: "#",
+          customChoice: "true",
+          includeKey: "true",
+          allowedChars: "[a-zA-Z0-9]+",
+          source: "/path/to/tags"
+        }
+      ]
+
+    }
+  }
+});
+
+  ```
+If there is only one activator for each element, it's possible to define configs as element attributes too:
+```javascript
+
+<textarea
     otobox="mention.array"
     otobox-key="@"
     otobox-custom-choice="true"
     otobox-include-key="true"
     otobox-allowed-chars="[a-zA-Z0-9]+"
-    otobox-source="/api/users.json"&gt;
-  &lt;/textarea&gt;
+    otobox-source="/path/to/users">
+  </textarea>
+  ```
 
 ## Roadmap
 - Caching prevoiusly loaded names
