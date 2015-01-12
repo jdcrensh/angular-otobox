@@ -37,6 +37,7 @@ app.directive('otoboxConfig', function () {
 
   ```
 If there is only one activator for each element, it's possible to define configs as element attributes too:
+
 ```javascript
 
 <textarea
@@ -48,7 +49,6 @@ If there is only one activator for each element, it's possible to define configs
     otobox-source="/path/to/users">
   </textarea>
   ```
-
 ## Roadmap
 - Caching prevoiusly loaded names
 
@@ -61,11 +61,11 @@ If there is only one activator for each element, it's possible to define configs
 - [Github](https://github.com/alihaghighatkhah)
 - [Personal page](http://colorofweb.com/)
 
-** Special thanks to Afshin Mehrabani**
+**Special thanks to Afshin Mehrabani**
 - [Github](https://github.com/afshinm)
 
 ## License
-> Copyright (C) 2015 Ali Haghighatkhah (haghighatkhah.ali@gmail.com)
+> Copyright (C) 2015 Ali Haghighatkhah (alihaghighatkhah@yahoo.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation
