@@ -96,6 +96,10 @@
     var wrapperDiv = this._wrapper = document.createElement('div');
     wrapperDiv.className = _c.call(this, 'wrapper');
 
+    if (targetObject.className != '') {
+      wrapperDiv.className = ' ' + targetObject.className;
+    }
+
     //append wrapper right before the target object
     targetObject.parentNode.insertBefore(wrapperDiv, targetObject);
 
@@ -108,11 +112,16 @@
     editableDiv.setAttribute('contenteditable', true);
     editableDiv.setAttribute('data-placeholder', targetObject.placeholder);
     editableDiv.className = _c.call(this, 'editableDiv');
-    editableDiv.style.width = targetObjectSize.width + 'px';
+
+    //set width and height to the wrapper
+    wrapperDiv.style.width = targetObjectSize.width + 'px';
 
     //if it's textarea
     if (targetObject.nodeName.toLowerCase() == 'textarea') {
-      editableDiv.style.height = targetObjectSize.height + 'px';
+      editableDiv.className += ' ' + _c.call(this, 'textarea-target');
+      wrapperDiv.style.height = targetObjectSize.height + 'px';
+    } else {
+      editableDiv.className += ' ' + _c.call(this, 'input-target');
     }
 
     wrapperDiv.appendChild(editableDiv);
@@ -298,7 +307,7 @@
       hintElement.parentNode.removeChild(hintElement);
     }
 
-    _setTargetObjectValue.call(this, editableDiv.innerText);
+    _setTargetObjectValue.call(this, editableDiv.textContent);
   };
 
   /**
@@ -316,7 +325,9 @@
    * Append and set attributes to the choice element
    */
   function _setChoiceElementAttrs (choiceLink, activatorKey, value, display, activator) {
-    choiceLink.innerText = (activator.includeKey ? activatorKey : '') + display;
+
+    choiceLink.textContent = (activator.includeKey ? activatorKey : '') + display;
+
     choiceLink.setAttribute('data-value', value);
     choiceLink.setAttribute('data-display', display);
     choiceLink.setAttribute('data-key', activatorKey);
@@ -350,6 +361,7 @@
 
     _changeMode.call(this, this._modes.normal);
     _toggleChoiceListState.call(this, false);
+    _setTargetObjectValue.call(this, editableDiv.textContent);
   };
 
   /**
@@ -373,8 +385,9 @@
 
             var anchor = document.createElement('a');
             anchor.href = 'javascript:void(0);';
-            anchor.setAttribute('data-value', resultItem[self._options.valueKey]);
-            anchor.innerText = resultItem[self._options.displayKey];
+            anchor.setAttribute('data-value', resultItem[self._currentActivator.valueKey]);
+            anchor.setAttribute('data-display', resultItem[self._currentActivator.displayKey]);
+            anchor.textContent = resultItem[self._options.displayKey];
 
             (function (resultItem) {
               anchor.onclick = function () {
@@ -444,7 +457,7 @@
     var hintElement = editableDiv.querySelector('.' + _c.call(this, 'hint'));
 
     if (hintElement != null) {
-      var textElement = document.createTextNode(hintElement.innerText);
+      var textElement = document.createTextNode(hintElement.textContent);
 
       //add the text element and remove the hint element
       hintElement.parentNode.insertBefore(textElement, hintElement);
@@ -454,12 +467,11 @@
 
       //TODO: compatible it with older versions of IE
       var createdRange = document.createRange();
-      createdRange.setStart(textElement, hintElement.innerText.length);
+      createdRange.setStart(textElement, hintElement.textContent.length);
 
       selectedRange.removeAllRanges();
       selectedRange.addRange(createdRange);
     }
-
   };
 
   /**
@@ -473,7 +485,7 @@
       targetObject.value = value;
     } else {
       //textarea
-      targetObject.innerText = value;
+      targetObject.textContent = value;
     }
   };
 
@@ -488,7 +500,7 @@
       return targetObject.value;
     } else {
       //textarea
-      return targetObject.innerText;
+      return targetObject.textContent;
     }
   };
 
@@ -508,7 +520,7 @@
     if (selectedRange.startContainer.nodeType == 3) {
       var inputValue = selectedRange.startContainer.textContent;
     } else {
-      var inputValue = editableDiv.innerText;
+      var inputValue = editableDiv.textContent;
     }
 
     var before = '';
@@ -587,8 +599,9 @@
   function _placeHintElement (text, activator) {
     var hintElement = document.createElement('span');
     hintElement.className = _c.call(this, 'hint');
+
     hintElement.setAttribute('data-activator', activator.name);
-    hintElement.innerText = text;
+    hintElement.textContent = text;
 
     var selectedRange = document.getSelection();
     selectedRange.getRangeAt(0).insertNode(hintElement);
@@ -678,7 +691,9 @@
   function _handleChoiceChange (e) {
     var focusNode = document.getSelection().focusNode;
     var activator = this._currentActivator;
-    var isSpace = false;
+
+    //a flag to hold the state
+    var isSpaceBetween = false;
 
     if (this._currentMode == this._modes.normal && /choiceItem/.test(focusNode.parentNode.className)) {
       var choiceElement = focusNode.parentNode;
@@ -692,16 +707,17 @@
 
         var textNodeContent = '';
         //we are at the end of the choice element
-        if (choiceElement.innerText.length == startOffset) {
+
+        if (choiceElement.textContent.length == startOffset) {
           textNodeContent = '\u00A0';
         } else {
           //other parts of the choice element
-          var beforeStr = choiceElement.innerText.substr(0, startOffset);
-          var afterStr = choiceElement.innerText.substr(startOffset, choiceElement.innerText.length);
-          isSpace = true;
+          var beforeStr = choiceElement.textContent.substr(0, startOffset).trim();
+          var afterStr = choiceElement.textContent.substr(startOffset, choiceElement.textContent.length);
+          isSpaceBetween = true;
 
           //first alter the content of the choice link
-          choiceElement.innerText = beforeStr;
+          choiceElement.textContent = beforeStr;
           textNodeContent = '\u00A0' + afterStr;
         }
 
@@ -716,7 +732,9 @@
         selection.removeAllRanges();
         selection.addRange(createdRange);
 
-        e.preventDefault();
+        //well, we should remove the whitepsace that user is pressed
+        //I think this approach is the best
+        choiceElement.textContent = choiceElement.textContent.trim();
       }
 
       //it seems user is changing the choice content
@@ -724,21 +742,30 @@
 
         //its okay if user change the content of the choice
         //we will alter attributes for the choice as well
-        var activatorParts = _isActivatorText.call(this, choiceElement.innerText);
-        _setChoiceElementAttrs.call(this, choiceElement, activatorParts.activatorKey, activatorParts.hintText, activatorParts.hintText, activatorParts.activator);
+        var activatorParts = _isActivatorText.call(this, choiceElement.textContent);
+
+        if (activatorParts != null) {
+          _setChoiceElementAttrs.call(this, choiceElement, activatorParts.activatorKey, activatorParts.hintText, activatorParts.hintText, activatorParts.activator);
+        } else {
+          var textElement = document.createTextNode(choiceElement.textContent);
+
+          choiceElement.parentNode.insertBefore(textElement, choiceElement);
+          choiceElement.parentNode.removeChild(choiceElement);
+        }
+
       } else {
         var selectedRange = document.getSelection();
         var startOffset = selectedRange.getRangeAt(0).startOffset;
         var createdRange = document.createRange();
 
         //in this part we should remove the choice element and convert it to text
-        var textElement = document.createTextNode(choiceElement.innerText);
+        var textElement = document.createTextNode(choiceElement.textContent);
 
         //add the text element and remove the hint element
         choiceElement.parentNode.insertBefore(textElement, choiceElement);
         choiceElement.parentNode.removeChild(choiceElement);
 
-        if (!isSpace) {
+        if (!isSpaceBetween) {
           createdRange.setStart(textElement, startOffset);
           createdRange.collapse(true);
 
@@ -756,7 +783,7 @@
     if (this._currentMode == this._modes.insert) {
       var hintElement = this._wrapper.querySelector('.' + _c.call(this, 'editableDiv') + ' .' + _c.call(this, 'hint'));
 
-      if (hintElement == null || hintElement.innerText == '' || hintElement.innerText == this._stackActivator) {
+      if (hintElement == null || hintElement.textContent == '' || hintElement.textContent == this._stackActivator) {
         _changeMode.call(this, this._modes.normal);
         _toggleChoiceListState.call(this, false);
       }
@@ -788,10 +815,52 @@
       var activator = _getActivator.call(this, activatorName);
 
       if (activator.includeKey) {
-        this._stack = hintElement.innerText.substr(1, hintElement.innerText.length);
+        this._stack = hintElement.textContent.substr(1, hintElement.textContent.length);
       } else {
-        this._stack = hintElement.innerText;
+        this._stack = hintElement.textContent;
       }
+    }
+  };
+
+  /**
+   * Go to next choice and make it active
+   */
+  function _selectChoice (e, up) {
+    if (this._currentMode == this._modes.insert) {
+      var currentChoice = this._wrapper.querySelector('.' + _c.call(this, 'active'));
+
+      if (currentChoice != null) {
+        currentChoice.className = '';
+        if (up) {
+          var previousItem = currentChoice.previousSibling;
+
+          if (previousItem != null) {
+            previousItem.className = _c.call(this, 'active')
+          }
+        } else {
+          var nextItem = currentChoice.nextSibling;
+
+          if (nextItem != null) {
+            nextItem.className = _c.call(this, 'active')
+          }
+        }
+      } else {
+        if (up) {
+          var lastItem = this._wrapper.querySelector('ul.' + _c.call(this, 'choices') + ' > li:last-child');
+
+          if (lastItem != null) {
+            lastItem.className = _c.call(this, 'active');
+          }
+        } else {
+          var firstItem = this._wrapper.querySelector('ul.' + _c.call(this, 'choices') + ' > li:first-child');
+
+          if (firstItem != null) {
+            firstItem.className = _c.call(this, 'active');
+          }
+        }
+      }
+
+      e.preventDefault();
     }
   };
 
@@ -806,12 +875,44 @@
     editableDiv.onkeypress = function (e) {
       _handleHintArea.call(self, e);
       _handleActivatorKey.call(self, e);
-      _handleChoiceChange.call(self, e);
+    };
+
+    editableDiv.onkeydown = function (e) {
+      if (e.keyCode == 38) {
+        //up
+        _selectChoice.call(self, e, true);
+      }
+
+      if (e.keyCode == 40) {
+        //down
+        _selectChoice.call(self, e, false);
+      }
+
+      if (e.keyCode == 13) {
+        //enter
+        if (self._currentMode == self._modes.insert) {
+          //now we should select an item
+          var currentAnchor = self._wrapper.querySelector('li.' + _c.call(self, 'active') + ' a');
+
+          var itemObject = {};
+          itemObject[self._currentActivator.displayKey] = currentAnchor.getAttribute('data-display');
+          itemObject[self._currentActivator.valueKey] = currentAnchor.getAttribute('data-value');
+
+          //clear the hint first
+          _clearHint.call(self);
+          _setChoice.call(self, itemObject);
+        }
+
+        e.preventDefault();
+      }
     };
 
     editableDiv.onkeyup = function (e) {
+      //check if the user is changing the choice element
+      _handleChoiceChange.call(self, e);
+
       //set value to target element
-      _setTargetObjectValue.call(self, editableDiv.innerText);
+      _setTargetObjectValue.call(self, editableDiv.textContent);
 
       if (e.keyCode == 46 || e.keyCode == 8) {
         //delete or backspace
@@ -824,9 +925,6 @@
 
         //check and see if the hint element is empty
         _handleEmptyHintElement.call(self);
-
-        //check if the user is changing the choice element
-        _handleChoiceChange.call(self, e);
       }
 
       if (e.keyCode == 37 || e.keyCode == 39) {
@@ -879,7 +977,7 @@
   };
 
   /**
-   * REMOTE SOURCE OF OTOBOX
+   * Remote XHR resource
    */
   function _xhrSource (activator, stack, options, fn) {
     var result = [];
@@ -889,8 +987,9 @@
     r.open("POST", activator.source, true);
     r.onreadystatechange = function () {
       if (r.readyState != 4 || r.status != 200) {
-        return
-      };
+        return;
+      }
+
       var items = JSON.parse(r.responseText);
 
       for (var i = 0; i < items.length; i++) {
@@ -898,11 +997,12 @@
         itemObject[options.displayKey] = items[i].username;
         result.push(itemObject);
         itemObject = {};
-      };
+      }
+
       fn.call(this, result);
     };
-    r.send("name=" + stack);
 
+    r.send("name=" + stack);
   };
 
   /* constructor */
