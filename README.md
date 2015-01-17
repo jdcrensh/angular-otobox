@@ -3,7 +3,12 @@
 > Angular directive for highlighting text parts, a replacement to all mentioning libraries. Written on plain Javascript with no dependency.
 
 **This Angular module is written based on otobox.js from Afshin Mehrabani**
-
+## Install
+**Bower**
+```javascript
+bower install angular-otobox
+  ```
+  
 ## How to use
 
 It's possible to define as much activators as needed:
