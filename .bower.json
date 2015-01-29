@@ -1,0 +1,32 @@
+{
+  "name": "angular-otobox",
+  "main": "angular-otobox.js",
+  "homepage": "https://github.com/alihaghighatkhah/angular-otobox",
+  "authors": [
+    "ali haghighatkhah <alihaghighatkhah@yahoo.com>"
+  ],
+  "description": "A dependency-less agular directive for highlighting words like mentioning ans tagging",
+  "keywords": [
+    "angularjs",
+    "highlighter",
+    "mentioning",
+    "tagging"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "c1f0f0df05",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c1f0f0df0574a57010b5f0094d0090306c3f1193"
+  },
+  "_source": "git://github.com/alihaghighatkhah/angular-otobox.git",
+  "_target": "*",
+  "_originalSource": "angular-otobox"
+}

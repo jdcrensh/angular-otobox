@@ -4,6 +4,9 @@ ul.otobox-choices {
 .otobox-wrapper.otobox-active ul.otobox-choices {
     display: block;
 }
+.otobox-wrapper {
+    position: relative;
+}
 .otobox-wrapper .otobox-input {
     display: none;
     position: absolute;
@@ -21,6 +24,10 @@ ul.otobox-choices {
     font-family: 'helvetica neue',helvetica,arial,sans-serif;
     font-size: 12px;
     box-sizing: border-box;
+}
+.otobox-wrapper .otobox-editableDiv.otobox-textarea-target {
+    height: 100%;
+    overflow-y: scroll;
 }
 .otobox-input-target {
     white-space: nowrap;
@@ -47,6 +54,19 @@ ul.otobox-choices {
     border-radius: 0 0 4px 4px;
     overflow: hidden;
     border: solid 2px #D5D5D5;
+    position: relative;
+    width: 100%;
+    z-index: 10000;
+    box-sizing: border-box;
+}
+.otobox-wrapper .otobox-choices .otobox-empty {
+    display: block;
+    background-color: #F3F5F5;
+    padding: 5px;
+    color: #666;
+    line-height: 24px;
+    font-weight: bold;
+    text-align: center;
 }
 .otobox-wrapper .otobox-choices a {
     display: block;
@@ -77,4 +97,38 @@ ul.otobox-choices {
     background: #3A88A9;
     padding: 3px;
     color: #F5F5F5;
+}
+/**
+ * Thanks to http://tobiasahlin.com/spinkit/
+ */
+.otobox-loading .otobox-loadingElement {
+    display: block;
+}
+.otobox-loadingElement {
+    top: 12px;
+    position: absolute;
+    right: 10px;
+    display: none;
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    -webkit-animation: rotateplane 1.2s infinite ease-in-out;
+    animation: rotateplane 1.2s infinite ease-in-out;
+}
+@-webkit-keyframes rotateplane {
+    0% { -webkit-transform: perspective(120px) }
+    50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+    100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+@keyframes rotateplane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
+    } 50% {
+        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
+    } 100% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
 }
