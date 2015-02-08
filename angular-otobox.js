@@ -7,7 +7,7 @@ var i = 0;
  * @summary setts configs of otobox from attribiutes of element
  * @param $attrs - all the configs must be hardcoded on element
  **/
-angularOtobox.directive("otobox", ['$timeout', function ($timeout) {
+angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $compile) {
   return {
     require: "?otoboxConfig",
     link: function ($scope, $element, $attrs, otoboxConfigCtrl) {
@@ -34,11 +34,10 @@ angularOtobox.directive("otobox", ['$timeout', function ($timeout) {
               source: $attrs.otoboxSource,
               displayKey: $attrs.otoboxDisplayKey,
               valueKey: $attrs.otoboxValueKey
-          }
+          };//config
           s[i].addActivator(config);
         }
-        // going for next element
-        i ++;
+        i++;
       });
     }
   }
