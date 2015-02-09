@@ -1,6 +1,12 @@
 var angularOtobox = angular.module('angular-otobox', []);
 var s = new Array();
-var i = 0;
+
+angularOtobox.run(['$rootScope', function ($rootScope) {
+  $rootScope.$on("$routeChangeStart", function () {
+    s = new Array();
+  });
+}]);
+
 
 /**
  * @name otobox
@@ -15,14 +21,14 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
       $timeout(function () {
 
         // initiating otobox for the current element
-        s[i] = new otobox($element[0]);
+        s[$attrs.otobox] = new otobox($element[0]);
 
         // adding activator
         var config = new Object();
         if ($scope.config instanceof Array) {
           // Adding multiple activators for a single emenet is only possible using otoboxConfig directive 
           for (var j = 0; j < $scope.config.length; j++) {
-            s[i].addActivator($scope.config[j]);
+            s[$attrs.otobox].addActivator($scope.config[j]);
           };
         } else {
           config = {
@@ -35,9 +41,8 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
               displayKey: $attrs.otoboxDisplayKey,
               valueKey: $attrs.otoboxValueKey
           };//config
-          s[i].addActivator(config);
+          s[$attrs.otobox].addActivator(config);
         }
-        i++;
       });
     }
   }
