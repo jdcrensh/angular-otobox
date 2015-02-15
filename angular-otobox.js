@@ -41,7 +41,7 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
               displayKey: $attrs.otoboxDisplayKey,
               valueKey: $attrs.otoboxValueKey
           };//config
-          s[$attrs.otobox].addActivator(config);
+          s[$attrs.otobox].setOption('useText', false).addActivator(config);
         }
       });
     }
