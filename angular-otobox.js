@@ -22,13 +22,12 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
 
         // initiating otobox for the current element
         s[$attrs.otobox] = new otobox($element[0]);
-
         // adding activator
         var config = new Object();
         if ($scope.config instanceof Array) {
           // Adding multiple activators for a single emenet is only possible using otoboxConfig directive 
           for (var j = 0; j < $scope.config.length; j++) {
-            s[$attrs.otobox].addActivator($scope.config[j]);
+            s[$attrs.otobox].addActivator($scope.config[j].activator);
           };
         } else {
           config = {
@@ -39,9 +38,10 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
               allowedChars: new RegExp($attrs.otoboxAllowedChars),
               source: $attrs.otoboxSource,
               displayKey: $attrs.otoboxDisplayKey,
-              valueKey: $attrs.otoboxValueKey
+              valueKey: $attrs.otoboxValueKey,
+              setText: $attrs.setText || true
           };//config
-          s[$attrs.otobox].setOption('useText', false).addActivator(config);
+          s[$attrs.otobox].setOption('useText', config.setText).addActivator(config);
         }
       });
     }
