@@ -43,6 +43,9 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
           };//config
           s[$attrs.otobox].setOption('useText', config.setText).addActivator(config);
         }
+        s[$attrs.otobox].bind('update', function () {
+          $element.triggerHandler('input');
+        });
       });
     }
   }
