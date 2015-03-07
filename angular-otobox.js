@@ -22,12 +22,14 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
 
         // initiating otobox for the current element
         s[$attrs.otobox] = new otobox($element[0]);
+
         // adding activator
         var config = new Object();
         if ($scope.config instanceof Array) {
-          // Adding multiple activators for a single emenet is only possible using otoboxConfig directive 
+          // Adding multiple activators for a single emenet is only possible using otoboxConfig directive
           for (var j = 0; j < $scope.config.length; j++) {
             s[$attrs.otobox].addActivator($scope.config[j].activator);
+            s[$attrs.otobox].setOption('useText', $scope.config.setText);
           };
         } else {
           config = {
