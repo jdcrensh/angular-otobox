@@ -11,6 +11,19 @@ bower install angular-otobox
   
 ## How to use
 
+* Add scripts to the layout file:<br>
+&lt;script src="path/to/otobox.js"&gt;<br>
+&lt;script src="path/to/angular-otobox.js"&gt;<br>
+
+* Add module to dependency list
+```javascript
+var app = angular.module('yourApp',[
+  "angular-otobox",
+]);
+  ```
+  
+* Define settings
+
 It's possible to define as much activators as needed:
 ```javascript
 app.directive('otoboxConfig', function () {
