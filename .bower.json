@@ -20,11 +20,11 @@
     "test",
     "tests"
   ],
-  "_release": "c1f0f0df05",
+  "_release": "0b9087839f",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "c1f0f0df0574a57010b5f0094d0090306c3f1193"
+    "commit": "0b9087839f05a3d6c1684ff49327ddb8fa33e378"
   },
   "_source": "git://github.com/alihaghighatkhah/angular-otobox.git",
   "_target": "*",

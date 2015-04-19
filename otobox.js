@@ -1108,6 +1108,15 @@
   };
 
   /**
+   * Manually set the content of editableDiv
+   */
+  function _setContentManually (content) {
+    var editableDiv = this._wrapper.querySelector('.' + _c.call(this, 'editableDiv'));
+
+    editableDiv.innerHTML = content;
+  };
+
+  /**
    * Bind an event
    */
   function _bind (name, fn) {
@@ -1196,6 +1205,10 @@
     },
     addChoice: function (activatorName, item) {
       _setChoiceManually.call(this, activatorName, item);
+      return this;
+    },
+    setContent: function (content) {
+      _setContentManually.call(this, content);
       return this;
     },
     getChoices: function () {

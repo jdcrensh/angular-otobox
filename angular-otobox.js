@@ -19,7 +19,6 @@ angularOtobox.directive("otobox", ['$timeout', '$compile', function ($timeout, $
     link: function ($scope, $element, $attrs, otoboxConfigCtrl) {
       // wating untile template generated
       $timeout(function () {
-
         // initiating otobox for the current element
         s[$attrs.otobox] = new otobox($element[0]);
 
