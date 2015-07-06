@@ -30,30 +30,49 @@ app.directive('otoboxConfig', function () {
   return {
     controller: function ($scope) {
 
-      $scope.config =  [
-        {
-          name: "mention.array",
-          key: "@",
-          customChoice: "false",
-          includeKey: "true",
-          allowedChars: "[a-zA-Z0-9]+",
-          source: "/path/to/users"
-        },
-        {
-          name: "mention.array",
-          key: "#",
-          customChoice: "true",
-          includeKey: "true",
-          allowedChars: "[a-zA-Z0-9]+",
-          source: "/path/to/tags"
+      this.getConfig = function () {
+          return {
+            key: $attrs.otoboxConfig,
+            activators: [
+
+              {
+                name: "mention.array",
+                key: "@",
+                customChoice: "false",
+                includeKey: "true",
+                allowedChars: "[a-zA-Z0-9]+",
+                source: "/path/to/users"
+              },
+              {
+                name: "mention.array",
+                key: "#",
+                customChoice: "true",
+                includeKey: "true",
+                allowedChars: "[a-zA-Z0-9]+",
+                source: "/path/to/tags"
+              }
+
+            ]
+          }
         }
-      ]
 
     }
   }
 });
 
   ```
+
+  then add direcives to textarea element
+
+```javascript
+<textarea
+  otobox-config="otobox"
+  otobox="item">
+</textarea>
+  ```
+which `$scope.item` is the object that you want the otobox object to be appended to. the `otobox` value passed to `otoboxConfig` directive is the name of otobox object while pinning to $scope.item.
+
+
 If there is only one activator for each element, it's possible to define configs as element attributes too:
 
 ```javascript
