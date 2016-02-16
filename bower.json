@@ -3,6 +3,10 @@
   "main": "angular-otobox.js",
   "version": "0.2.0",
   "homepage": "https://github.com/alihaghighatkhah/angular-otobox",
+  "main": [
+    "otobox.js", 
+    "angular-otobox.js"
+  ],
   "authors": [
     "ali haghighatkhah <alihaghighatkhah@yahoo.com>"
   ],
